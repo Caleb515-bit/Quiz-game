@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+<title>Qiuz</title>
+<style type="text/css" media="all">
+*{
+    padding:0;
+    margin:0;
+    border-box:box-sizing;
+}
+body{
+    background-color:#EE964B;
+    font-family:'Poppins',sans-Serif;
+}
+  #mainCon,.content{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+  }
+  .content{
+      flex-direction:column;
+      background-color:#1F271B;
+      width:auto;
+      height:auto;
+      padding:20px 30px;
+      color:#28AFB0;
+      gap:20px;
+  }
+  span,p{
+      font-size:30px;
+      text-align:center;
+      font-weight:700;
+  }p{
+      font-size:18px;
+      font-weight:400;
+  }
+  button{
+      padding:10px 30px;
+      border:none;
+      border-radius:5px;
+      background-color:#19647E;
+      color:#EE964B;
+      font-size:16px;
+      font-weight:500;
+  }
+</style>
+</head>
+<body>
+<div id="mainCon">
+    <div class="content">
+            <span>🧠 QUIZ</span>
+    <div>
+    <p class="question">Question loading....</p>    </div>
+    <div>
+        <button class="true">True</button>
+ <button class="false">False</button>
+    </div>
+        <div>
+        <button class="getQuiz" onclick="getQuestion()">Get Question</button>
+    </div>
+
+  <audio id="bgMusic" src="Game.mp3" autoplay loop controls style="width:0; height:0; visibility:hidden;"></audio>
+</div>
+
+</body>
+<script type="text/javascript" charset="utf-8">
+   const displayQuestion =document.querySelector('.question');
+   let quizData = null;
+    async function getQuestion() {
+    try {
+        const request = await fetch('https://opentdb.com/api.php?amount=1&category=19&difficulty=hard&type=boolean');
+        const data = await request.json();
+        quizData = data.results[0];          // save globally
+        displayQuestion.innerHTML = quizData.question;
+    } catch(error) {
+        displayQuestion.textContent = 'Something Went Wrong';
+        console.error(error);
+    }
+}
+function checkAnswer(userAnswer) {
+    if (!quizData) return;          
+    if (quizData.correct_answer === userAnswer) {
+        alert("✅ Correct!");    
+    } else {
+        alert("❌ Wrong!");
+    }
+
+    getQuestion();
+}
+document.querySelector('.true').addEventListener('click', () => checkAnswer("True"));
+document.querySelector('.false').addEventListener('click', () => checkAnswer("False"));
+
+const music = document.getElementById('bgMusic');
+
+document.querySelector('.getQuiz').addEventListener('click', () => {
+    music.play().catch(err => console.log("Autoplay blocked:", err));
+});
+</script>
+</html> 
