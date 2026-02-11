@@ -73,7 +73,7 @@ body{
    let quizData = null;
     async function getQuestion() {
     try {
-        const request = await fetch('https://opentdb.com/api.php?amount=1&category=17&difficulty=hard&type=boolean');
+        const request = await fetch('https://opentdb.com/api.php?amount=1&type=boolean');
         const data = await request.json();
         quizData = data.results[0];          // save globally
         displayQuestion.innerHTML = quizData.question;
